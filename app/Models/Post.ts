@@ -1,8 +1,17 @@
 import { DateTime } from 'luxon'
 import { v4 } from 'uuid'
-import { BaseModel, beforeCreate, belongsTo, column, BelongsTo } from '@ioc:Adonis/Lucid/Orm'
+import {
+  BaseModel,
+  beforeCreate,
+  belongsTo,
+  column,
+  BelongsTo,
+  manyToMany,
+  ManyToMany,
+} from '@ioc:Adonis/Lucid/Orm'
 
 import User from './User'
+import Tag from './Tag'
 
 export default class Post extends BaseModel {
   @column({ isPrimary: true })
@@ -30,6 +39,14 @@ export default class Post extends BaseModel {
     foreignKey: 'authorId',
   })
   author: BelongsTo<typeof User>
+
+  @manyToMany(() => Tag, {
+    localKey: 'id',
+    pivotForeignKey: 'post_id',
+    relatedKey: 'id',
+    pivotRelatedForeignKey: 'tag_id',
+  })
+  public tags: ManyToMany<typeof Tag>
 
   @beforeCreate()
   public static async generateUUID(post: Post) {

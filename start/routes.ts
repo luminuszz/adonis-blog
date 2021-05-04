@@ -18,6 +18,8 @@
 |
 */
 
+import { Router } from '@adonisjs/http-server/build/standalone'
+
 import Route from '@ioc:Adonis/Core/Route'
 
 Route.get('/', async () => {
@@ -31,3 +33,7 @@ Route.post('login', 'AuthController.login')
 Route.group(() => Route.resource('/', 'PostsController'))
   .middleware('auth')
   .prefix('posts')
+
+Route.resource('tags', 'TagsController')
+
+Route.post('tags/addTag', 'PostsController.addTagInPost')
